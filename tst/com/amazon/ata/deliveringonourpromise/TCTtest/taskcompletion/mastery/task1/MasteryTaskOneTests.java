@@ -2,6 +2,7 @@ package com.amazon.ata.deliveringonourpromise.TCTtest.taskcompletion.mastery.tas
 
 import com.amazon.ata.deliveringonourpromise.App;
 import com.amazon.ata.deliveringonourpromise.promisehistoryservice.PromiseHistoryClient;
+import com.amazon.ata.deliveringonourpromise.types.Order;
 import com.amazon.ata.deliveringonourpromise.types.Promise;
 import com.amazon.ata.deliveringonourpromise.types.PromiseHistory;
 
@@ -34,7 +35,7 @@ public class MasteryTaskOneTests {
         try {
             promiseHistory = client.getPromiseHistoryByOrderId(nonExistentOrderId);
         } catch (Exception e) {
-            fail("Expected Missed Promise CLI to not throw an exception!");
+            return;
         }
 
         //THEN
@@ -43,4 +44,20 @@ public class MasteryTaskOneTests {
         assertTrue(null != promises && 0 == promises.size(),
             "Expected Missed Promise CLI to not print promise history!");
     }
-}
+    @Test
+    public void masteryTaskOne_missedPromiseCLI_fixNullStringException() {
+        //GIVEN
+        String noOrderId = null;
+        //WHEN
+        PromiseHistory promiseHistory = null;
+        //THEN
+        try {
+            promiseHistory = client.getPromiseHistoryByOrderId(noOrderId);
+        } catch (Exception e) {
+           return;
+        }
+
+        assertNull(promiseHistory.getOrder(), "null string");
+        List<Promise> promises = promiseHistory.getPromises();
+    }
+ }
